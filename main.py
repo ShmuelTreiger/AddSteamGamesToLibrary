@@ -52,7 +52,7 @@ for i in range(len(games)):
 
     # Click to add game to library
     try:
-        e = driver.find_element(By.XPATH, value="//*[@id=\"game_area_purchase\"]/div/div[2]/div/div[3]/span")
+        e = driver.find_element(by=By.XPATH, value="//*[@id=\"game_area_purchase\"]/div/div[2]/div/div[3]/span")
     except NoSuchElementException:
         failed_games.append(game)
         continue
