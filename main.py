@@ -51,6 +51,7 @@ while i < len(games):
         e = driver.find_element(by=By.PARTIAL_LINK_TEXT, value=game)
     except NoSuchElementException:
         failed_games.append(game)
+        i += 1
         continue
     e.click()
     driver.implicitly_wait(implicit_wait_time)
@@ -60,6 +61,7 @@ while i < len(games):
         e = driver.find_element(by=By.XPATH, value='//*[@id="game_area_purchase"]/div/div[2]/div/div[3]/span')
     except NoSuchElementException:
         failed_games.append(game)
+        i += 1
         continue
     e.click()
 
