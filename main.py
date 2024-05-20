@@ -70,6 +70,14 @@ for i in range(len(games)):
         failed_games.append(game)
         break
 
+    # Click OK to exit success popup
+    try:
+        e = driver.find_element(by=By.CLASS_NAME, value="btn_grey_steamui")
+    except NoSuchElementException:
+        failed_games.append(game)
+        break
+    e.click()
+
     successful_games.append(game)
     driver.implicitly_wait(implicit_wait_time)
 
