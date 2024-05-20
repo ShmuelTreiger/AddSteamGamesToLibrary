@@ -23,4 +23,16 @@ e = driver.find_element(by=By.XPATH, value="//*[@id=\"responsive_page_template_c
 e.send_keys(credentials.password)
 e.send_keys(Keys.ENTER)
 
+driver.implicitly_wait(3)
+
+# Load url list
+url_list = open("urls.txt", "r", encoding="utf8")
+urls = url_list.readlines()
+
+for i in range(len(urls)):
+    url = urls[i]
+    e = driver.find_element(by=By.XPATH, value="//*[@id=\"store_nav_search_term\"]")
+    e.send_keys(url)
+    driver.implicitly_wait(2)
+
 driver.close()
