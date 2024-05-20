@@ -31,6 +31,7 @@ driver.implicitly_wait(3)
 url_list = open("urls.txt", "r", encoding="utf8")
 urls = url_list.readlines()
 
+successful_urls = []
 failed_urls = []
 for i in range(len(urls)):
     # Search for title
@@ -55,11 +56,16 @@ for i in range(len(urls)):
         failed_urls.append(url)
         continue
     e.click()
+    successful_urls.append(url)
     driver.implicitly_wait(2)
 
 results = open("results.txt", "w")
-results.write("The following titles failed to be added to your account:\n")
+results.write("The following titles failed to be added to your library:\n")
 for url in failed_urls:
+    results.write(url + "\n")
+
+results.write("\nThe following titles were successfully added to your library:\n")
+for url in successful_urls:
     results.write(url + "\n")
 
 driver.close()
