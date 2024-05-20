@@ -48,6 +48,15 @@ for i in range(len(urls)):
     e.click()
     driver.implicitly_wait(2)
 
+    # Click to add game to library
+    try:
+        e = driver.find_element(By.XPATH, value="//*[@id=\"game_area_purchase\"]/div/div[2]/div/div[3]/span")
+    except NoSuchElementException:
+        failed_urls.append(url)
+        continue
+    e.click()
+    driver.implicitly_wait(2)
+
 results = open("results.txt", "w")
 results.write("The following titles failed to be added to your account:\n")
 for url in failed_urls:
