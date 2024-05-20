@@ -34,6 +34,9 @@ for i in range(len(urls)):
     url = urls[i]
     e = driver.find_element(by=By.XPATH, value="//*[@id=\"store_nav_search_term\"]")
     e.send_keys(url)
+    driver.implicitly_wait(1)
+    e = driver.find_element(by=By.PARTIAL_LINK_TEXT, value=url)
+    e.click()
     driver.implicitly_wait(2)
 
 driver.close()
