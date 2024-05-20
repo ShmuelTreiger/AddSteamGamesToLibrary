@@ -15,6 +15,7 @@ driver.get(steam_url)
 # Navigate to login page
 e = driver.find_element(by=By.LINK_TEXT, value="login")
 e.click()
+driver.implicitly_wait(1)
 
 # Login
 e = driver.find_element(by=By.CLASS_NAME, value="_2eKVn6g5Yysx9JmutQe7WV")
