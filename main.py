@@ -1,6 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from selenium.common.exceptions import NoSuchElementException
 
 import credentials
 
@@ -35,7 +36,10 @@ for i in range(len(urls)):
     e = driver.find_element(by=By.XPATH, value="//*[@id=\"store_nav_search_term\"]")
     e.send_keys(url)
     driver.implicitly_wait(1)
-    e = driver.find_element(by=By.PARTIAL_LINK_TEXT, value=url)
+    try:
+        e = driver.find_element(by=By.PARTIAL_LINK_TEXT, value=url)
+    except NoSuchElementException:
+        continue
     e.click()
     driver.implicitly_wait(2)
 
