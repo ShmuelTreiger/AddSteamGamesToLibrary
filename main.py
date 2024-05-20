@@ -82,7 +82,7 @@ for i in range(len(games)):
 
 results = open("results.txt", "w")
 if failed_games:
-    results.write("The following titles failed to be added to your library:\n")
+    results.write("The following titles failed to be added to your library.\nIt is likely they were either not free or not found:\n")
     for game in failed_games:
         results.write(game + "\n")
     results.write("\n")
