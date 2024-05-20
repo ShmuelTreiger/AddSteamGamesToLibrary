@@ -5,9 +5,6 @@ from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-from configparser import ConfigParser
-
-from bs4 import BeautifulSoup
 
 import credentials
 
@@ -42,6 +39,7 @@ games = games_list.readlines()
 successful_games = []
 failed_games = []
 early_access_games = []
+game_demos = []
 games_not_reached = []
 i = 0
 while i < len(games):
@@ -72,6 +70,15 @@ while i < len(games):
         all_text = soup.get_text()
         if all_text.find("Early Access Game") >= 0:
             early_access_games.append(game)
+            i += 1
+            continue
+
+    skip_game_demos = config.get(section="General", option="skip_game_demos")
+    if skip_game_demos:
+        soup = BeautifulSoup(driver.page_source, "html.parser")
+        all_text = soup.get_text()
+        if all_text.find(f"Download {game} Demo") >= 0:
+            game_demos.append(game)
             i += 1
             continue
 
@@ -130,6 +137,12 @@ if failed_games:
 if early_access_games:
     results.write("The following early access games were skipped.\nTo download, change the setting in config.ini:\n")
     for game in early_access_games:
+        results.write(game + "\n")
+    results.write("\n")
+
+if game_demos:
+    results.write("The following game demos were skipped.\nTo download, change the setting in config.ini:\n")
+    for game in game_demos:
         results.write(game + "\n")
     results.write("\n")
 
