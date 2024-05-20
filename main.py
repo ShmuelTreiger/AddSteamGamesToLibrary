@@ -6,6 +6,7 @@ from selenium.common.exceptions import NoSuchElementException
 import credentials
 
 steam_url = "https://www.steampowered.com"
+implicit_wait_time = 2
 
 # Open browser
 driver = webdriver.Chrome()
@@ -16,7 +17,7 @@ driver.get(steam_url)
 # Navigate to login page
 e = driver.find_element(by=By.LINK_TEXT, value="login")
 e.click()
-driver.implicitly_wait(1)
+driver.implicitly_wait(implicit_wait_time)
 
 # Login
 e = driver.find_element(by=By.CLASS_NAME, value="_2eKVn6g5Yysx9JmutQe7WV")
@@ -25,7 +26,7 @@ e = driver.find_element(by=By.XPATH, value="//*[@id=\"responsive_page_template_c
 e.send_keys(credentials.password)
 e.send_keys(Keys.ENTER)
 
-driver.implicitly_wait(3)
+driver.implicitly_wait(implicit_wait_time)
 
 # Load games list
 games_list = open("games.txt", "r", encoding="utf8")
@@ -38,7 +39,7 @@ for i in range(len(games)):
     game = games[i].strip()  # Remove trailing white space
     e = driver.find_element(by=By.XPATH, value="//*[@id=\"store_nav_search_term\"]")
     e.send_keys(game)
-    driver.implicitly_wait(1)
+    driver.implicitly_wait(implicit_wait_time)
 
     # Attempt to click on title
     try:
@@ -47,7 +48,7 @@ for i in range(len(games)):
         failed_games.append(game)
         continue
     e.click()
-    driver.implicitly_wait(2)
+    driver.implicitly_wait(implicit_wait_time)
 
     # Click to add game to library
     try:
@@ -57,7 +58,7 @@ for i in range(len(games)):
         continue
     e.click()
     successful_games.append(game)
-    driver.implicitly_wait(2)
+    driver.implicitly_wait(implicit_wait_time)
 
 results = open("results.txt", "w")
 results.write("The following titles failed to be added to your library:\n")
