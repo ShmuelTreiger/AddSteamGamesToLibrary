@@ -128,27 +128,24 @@ if successful_games:
 
 if failed_games:
     results.write(
-        "The following titles failed to be added to your library.\nIt is likely they were either not free or not found:\n"
+        "\nThe following titles failed to be added to your library.\nIt is likely they were either not free, not found, or already in your library:\n"
     )
     for game in failed_games:
         results.write(game + "\n")
-    results.write("\n")
 
 if early_access_games:
-    results.write("The following early access games were skipped.\nTo download, change the setting in config.ini:\n")
+    results.write("\nThe following early access games were skipped.\nTo download, change the setting in config.ini:\n")
     for game in early_access_games:
         results.write(game + "\n")
-    results.write("\n")
 
 if game_demos:
-    results.write("The following game demos were skipped.\nTo download, change the setting in config.ini:\n")
+    results.write("\nThe following game demos were skipped.\nTo download, change the setting in config.ini:\n")
     for game in game_demos:
         results.write(game + "\n")
-    results.write("\n")
 
 if games_not_reached:
     results.write(
-        "The following titles were not attempted.\nYou have likely reached the maximum number of titles Steam will allow you to add for now.\nTry again later:\n"
+        "\nThe following titles were not attempted.\nYou have likely reached the maximum number of titles Steam will allow you to add for now.\nTry again later:\n"
     )
     for game in successful_games:
         results.write(game + "\n")
