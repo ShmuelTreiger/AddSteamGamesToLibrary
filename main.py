@@ -57,6 +57,19 @@ for i in range(len(games)):
         failed_games.append(game)
         continue
     e.click()
+
+    # Check for confirmed success message
+    expected_message = f"{game} has been added to your account.  It is now available in your Steam Library.".lower()
+    try:
+        e = driver.find_element(by=By.CLASS_NAME, value="newmodal_content")
+    except NoSuchElementException:
+        failed_games.append(game)
+        break
+    message = e.get_attribute("innerHTML")
+    if message.lower().find(expected_message) < 0:
+        failed_games.append(game)
+        break
+
     successful_games.append(game)
     driver.implicitly_wait(implicit_wait_time)
 
