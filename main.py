@@ -31,8 +31,9 @@ driver.implicitly_wait(3)
 url_list = open("urls.txt", "r", encoding="utf8")
 urls = url_list.readlines()
 
+failed_urls = []
 for i in range(len(urls)):
-    url = urls[i]
+    url = urls[i].strip()
     e = driver.find_element(by=By.XPATH, value="//*[@id=\"store_nav_search_term\"]")
     e.send_keys(url)
     driver.implicitly_wait(1)
@@ -42,5 +43,10 @@ for i in range(len(urls)):
         continue
     e.click()
     driver.implicitly_wait(2)
+
+results = open("results.txt", "w")
+results.write("The following titles failed to be added to your account:\n")
+for url in failed_urls:
+    results.write(url + "\n")
 
 driver.close()
