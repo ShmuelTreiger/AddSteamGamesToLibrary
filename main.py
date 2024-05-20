@@ -27,24 +27,24 @@ e.send_keys(Keys.ENTER)
 
 driver.implicitly_wait(3)
 
-# Load url list
-url_list = open("urls.txt", "r", encoding="utf8")
-urls = url_list.readlines()
+# Load games list
+games_list = open("games.txt", "r", encoding="utf8")
+games = games_list.readlines()
 
-successful_urls = []
-failed_urls = []
-for i in range(len(urls)):
+successful_games = []
+failed_games = []
+for i in range(len(games)):
     # Search for title
-    url = urls[i].strip()  # Remove trailing white space
+    game = games[i].strip()  # Remove trailing white space
     e = driver.find_element(by=By.XPATH, value="//*[@id=\"store_nav_search_term\"]")
-    e.send_keys(url)
+    e.send_keys(game)
     driver.implicitly_wait(1)
 
     # Attempt to click on title
     try:
-        e = driver.find_element(by=By.PARTIAL_LINK_TEXT, value=url)
+        e = driver.find_element(by=By.PARTIAL_LINK_TEXT, value=game)
     except NoSuchElementException:
-        failed_urls.append(url)
+        failed_games.append(game)
         continue
     e.click()
     driver.implicitly_wait(2)
@@ -53,19 +53,19 @@ for i in range(len(urls)):
     try:
         e = driver.find_element(By.XPATH, value="//*[@id=\"game_area_purchase\"]/div/div[2]/div/div[3]/span")
     except NoSuchElementException:
-        failed_urls.append(url)
+        failed_games.append(game)
         continue
     e.click()
-    successful_urls.append(url)
+    successful_games.append(game)
     driver.implicitly_wait(2)
 
 results = open("results.txt", "w")
 results.write("The following titles failed to be added to your library:\n")
-for url in failed_urls:
-    results.write(url + "\n")
+for game in failed_games:
+    results.write(game + "\n")
 
 results.write("\nThe following titles were successfully added to your library:\n")
-for url in successful_urls:
-    results.write(url + "\n")
+for game in successful_games:
+    results.write(game + "\n")
 
 driver.close()
