@@ -32,7 +32,9 @@ games = games_list.readlines()
 
 successful_games = []
 failed_games = []
-for i in range(len(games)):
+games_not_reached = []
+i = 0
+while i < len(games):
     driver.implicitly_wait(implicit_wait_time)
 
     # Search for title
@@ -63,11 +65,11 @@ for i in range(len(games)):
     try:
         e = driver.find_element(by=By.CLASS_NAME, value="newmodal_content")
     except NoSuchElementException:
-        failed_games.append(game)
+        games_not_reached.append(game)
         break
     message = e.get_attribute("innerHTML")
     if message.lower().find(expected_message) < 0:
-        failed_games.append(game)
+        games_not_reached.append(game)
         break
 
     # Click OK to exit success popup
@@ -79,6 +81,13 @@ for i in range(len(games)):
     e.click()
 
     successful_games.append(game)
+    i += 1
+
+# Create list of games that weren't reached
+while i < len(games):
+    game = games[i].strip()  # Remove trailing white space
+    games_not_reached.append(game)
+    i += 1
 
 results = open("results.txt", "w")
 if failed_games:
@@ -91,5 +100,11 @@ if successful_games:
     results.write("The following titles were successfully added to your library:\n")
     for game in successful_games:
         results.write(game + "\n")
+
+if games_not_reached:
+    results.write("The following titles were not attempted.\nYou have likely reached the maximum number of titles Steam will allow you to add for now.\nTry again later:\n")
+    for game in successful_games:
+        results.write(game + "\n")
+
 
 driver.close()
