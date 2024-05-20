@@ -149,7 +149,7 @@ if games_not_reached:
     results.write(
         "\nThe following titles were not attempted.\nYou have likely reached the maximum number of titles Steam will allow you to add for now.\nTry again later:\n"
     )
-    for game in successful_games:
+    for game in games_not_reached:
         results.write(game + "\n")
 
 driver.close()
