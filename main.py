@@ -98,10 +98,12 @@ while i < len(games):
         e = driver.find_element(by=By.CLASS_NAME, value="newmodal_content")
     except NoSuchElementException:
         games_not_reached.append(game)
+        i += 1
         break
     message = e.get_attribute("innerHTML")
     if message.lower().find(expected_message) < 0:
         games_not_reached.append(game)
+        i += 1
         break
 
     # Click OK to exit success popup
@@ -109,6 +111,7 @@ while i < len(games):
         e = driver.find_element(by=By.CLASS_NAME, value="btn_grey_steamui")
     except NoSuchElementException:
         failed_games.append(game)
+        i += 1
         break
     e.click()
     driver.implicitly_wait(implicit_wait_time)
