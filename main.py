@@ -22,7 +22,10 @@ driver.implicitly_wait(implicit_wait_time)
 # Login
 e = driver.find_element(by=By.CLASS_NAME, value="_2eKVn6g5Yysx9JmutQe7WV")
 e.send_keys(credentials.username)
-e = driver.find_element(by=By.XPATH, value="//*[@id=\"responsive_page_template_content\"]/div[3]/div[1]/div/div/div/div[2]/div/form/div[2]/input")
+e = driver.find_element(
+    by=By.XPATH,
+    value='//*[@id="responsive_page_template_content"]/div[3]/div[1]/div/div/div/div[2]/div/form/div[2]/input',
+)
 e.send_keys(credentials.password)
 e.send_keys(Keys.ENTER)
 
@@ -39,7 +42,7 @@ while i < len(games):
 
     # Search for title
     game = games[i].strip()  # Remove trailing white space
-    e = driver.find_element(by=By.XPATH, value="//*[@id=\"store_nav_search_term\"]")
+    e = driver.find_element(by=By.XPATH, value='//*[@id="store_nav_search_term"]')
     e.send_keys(game)
     driver.implicitly_wait(implicit_wait_time)
 
@@ -54,7 +57,7 @@ while i < len(games):
 
     # Click to add game to library
     try:
-        e = driver.find_element(by=By.XPATH, value="//*[@id=\"game_area_purchase\"]/div/div[2]/div/div[3]/span")
+        e = driver.find_element(by=By.XPATH, value='//*[@id="game_area_purchase"]/div/div[2]/div/div[3]/span')
     except NoSuchElementException:
         failed_games.append(game)
         continue
@@ -96,13 +99,17 @@ if successful_games:
         results.write(game + "\n")
 
 if failed_games:
-    results.write("The following titles failed to be added to your library.\nIt is likely they were either not free or not found:\n")
+    results.write(
+        "The following titles failed to be added to your library.\nIt is likely they were either not free or not found:\n"
+    )
     for game in failed_games:
         results.write(game + "\n")
     results.write("\n")
 
 if games_not_reached:
-    results.write("The following titles were not attempted.\nYou have likely reached the maximum number of titles Steam will allow you to add for now.\nTry again later:\n")
+    results.write(
+        "The following titles were not attempted.\nYou have likely reached the maximum number of titles Steam will allow you to add for now.\nTry again later:\n"
+    )
     for game in successful_games:
         results.write(game + "\n")
 
