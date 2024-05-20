@@ -33,10 +33,13 @@ urls = url_list.readlines()
 
 failed_urls = []
 for i in range(len(urls)):
-    url = urls[i].strip()
+    # Search for title
+    url = urls[i].strip()  # Remove trailing white space
     e = driver.find_element(by=By.XPATH, value="//*[@id=\"store_nav_search_term\"]")
     e.send_keys(url)
     driver.implicitly_wait(1)
+
+    # Attempt to click on title
     try:
         e = driver.find_element(by=By.PARTIAL_LINK_TEXT, value=url)
     except NoSuchElementException:
