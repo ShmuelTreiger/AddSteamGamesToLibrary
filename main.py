@@ -90,21 +90,20 @@ while i < len(games):
     i += 1
 
 results = open("results.txt", "w")
+if successful_games:
+    results.write("The following titles were successfully added to your library:\n")
+    for game in successful_games:
+        results.write(game + "\n")
+
 if failed_games:
     results.write("The following titles failed to be added to your library.\nIt is likely they were either not free or not found:\n")
     for game in failed_games:
         results.write(game + "\n")
     results.write("\n")
 
-if successful_games:
-    results.write("The following titles were successfully added to your library:\n")
-    for game in successful_games:
-        results.write(game + "\n")
-
 if games_not_reached:
     results.write("The following titles were not attempted.\nYou have likely reached the maximum number of titles Steam will allow you to add for now.\nTry again later:\n")
     for game in successful_games:
         results.write(game + "\n")
-
 
 driver.close()
