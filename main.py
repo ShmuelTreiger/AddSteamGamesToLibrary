@@ -125,7 +125,7 @@ while i < len(games):
     games_not_reached.append(game)
     i += 1
 
-results = open("results.txt", "w")
+results = open("results.txt", "w", encoding="utf8")
 if successful_games:
     results.write("The following titles were successfully added to your library:\n")
     for game in successful_games:
