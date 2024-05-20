@@ -26,8 +26,6 @@ e = driver.find_element(by=By.XPATH, value="//*[@id=\"responsive_page_template_c
 e.send_keys(credentials.password)
 e.send_keys(Keys.ENTER)
 
-driver.implicitly_wait(implicit_wait_time)
-
 # Load games list
 games_list = open("games.txt", "r", encoding="utf8")
 games = games_list.readlines()
@@ -35,6 +33,8 @@ games = games_list.readlines()
 successful_games = []
 failed_games = []
 for i in range(len(games)):
+    driver.implicitly_wait(implicit_wait_time)
+
     # Search for title
     game = games[i].strip()  # Remove trailing white space
     e = driver.find_element(by=By.XPATH, value="//*[@id=\"store_nav_search_term\"]")
@@ -70,8 +70,15 @@ for i in range(len(games)):
         failed_games.append(game)
         break
 
+    # Click OK to exit success popup
+    try:
+        e = driver.find_element(by=By.CLASS_NAME, value="btn_grey_steamui")
+    except NoSuchElementException:
+        failed_games.append(game)
+        break
+    e.click()
+
     successful_games.append(game)
-    driver.implicitly_wait(implicit_wait_time)
 
 results = open("results.txt", "w")
 if failed_games:
