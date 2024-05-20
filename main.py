@@ -61,12 +61,15 @@ for i in range(len(games)):
     driver.implicitly_wait(implicit_wait_time)
 
 results = open("results.txt", "w")
-results.write("The following titles failed to be added to your library:\n")
-for game in failed_games:
-    results.write(game + "\n")
+if failed_games:
+    results.write("The following titles failed to be added to your library:\n")
+    for game in failed_games:
+        results.write(game + "\n")
+    results.write("\n")
 
-results.write("\nThe following titles were successfully added to your library:\n")
-for game in successful_games:
-    results.write(game + "\n")
+if successful_games:
+    results.write("The following titles were successfully added to your library:\n")
+    for game in successful_games:
+        results.write(game + "\n")
 
 driver.close()
