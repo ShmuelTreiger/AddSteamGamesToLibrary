@@ -1,7 +1,13 @@
+from configparser import ConfigParser
+
+from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from configparser import ConfigParser
+
+from bs4 import BeautifulSoup
 
 import credentials
 
@@ -35,6 +41,7 @@ games = games_list.readlines()
 
 successful_games = []
 failed_games = []
+early_access_games = []
 games_not_reached = []
 i = 0
 while i < len(games):
@@ -55,6 +62,18 @@ while i < len(games):
         continue
     e.click()
     driver.implicitly_wait(implicit_wait_time)
+
+    config = ConfigParser()
+    config.read("config.ini")
+    skip_early_access_games = config.get(section="General", option="skip_early_access_games")
+
+    if skip_early_access_games:
+        soup = BeautifulSoup(driver.page_source, "html.parser")
+        all_text = soup.get_text()
+        if all_text.find("Early Access Game") >= 0:
+            early_access_games.append(game)
+            i += 1
+            continue
 
     # Click to add game to library
     try:
@@ -105,6 +124,12 @@ if failed_games:
         "The following titles failed to be added to your library.\nIt is likely they were either not free or not found:\n"
     )
     for game in failed_games:
+        results.write(game + "\n")
+    results.write("\n")
+
+if early_access_games:
+    results.write("The following early access games were skipped.\nTo download, change the setting in config.ini:\n")
+    for game in early_access_games:
         results.write(game + "\n")
     results.write("\n")
 
