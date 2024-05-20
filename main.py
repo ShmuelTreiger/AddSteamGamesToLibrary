@@ -158,6 +158,5 @@ if games_not_reached:
     )
     for game in games_not_reached:
         results.write(game + "\n")
-    results.write("\n")
 
 driver.close()
