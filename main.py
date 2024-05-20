@@ -90,6 +90,7 @@ while i < len(games):
         i += 1
         continue
     e.click()
+    driver.implicitly_wait(implicit_wait_time)
 
     # Check for confirmed success message
     expected_message = f"{game} has been added to your account.  It is now available in your Steam Library.".lower()
@@ -110,6 +111,7 @@ while i < len(games):
         failed_games.append(game)
         break
     e.click()
+    driver.implicitly_wait(implicit_wait_time)
 
     successful_games.append(game)
     i += 1
