@@ -40,6 +40,7 @@ for i in range(len(urls)):
     try:
         e = driver.find_element(by=By.PARTIAL_LINK_TEXT, value=url)
     except NoSuchElementException:
+        failed_urls.append(url)
         continue
     e.click()
     driver.implicitly_wait(2)
