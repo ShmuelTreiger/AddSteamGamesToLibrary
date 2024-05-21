@@ -1,0 +1,4 @@
+beautifulsoup4~=4.12.3
+selenium~=4.21.0
+black~=24.2.2
+isort~=5.13.2
