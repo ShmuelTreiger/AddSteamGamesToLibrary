@@ -51,6 +51,7 @@ games = games_list.readlines()
 successful_games = []
 games_already_in_library = []
 games_cost_money = []
+games_not_found = []
 failed_games = []
 early_access_games = []
 game_demos = []
@@ -70,7 +71,7 @@ while i < len(games):
     try:
         e = driver.find_element(by=By.PARTIAL_LINK_TEXT, value=game)
     except NoSuchElementException:
-        failed_games.append(game)
+        games_not_found.append(game)
         i += 1
         continue
     e.click()
@@ -177,9 +178,17 @@ if games_cost_money:
         results.write(game + "\n")
     results.write("\n")
 
+if games_not_found:
+    results.write(
+        "The following titles were not found on steam:\n"
+    )
+    for game in games_not_found:
+        results.write(game + "\n")
+    results.write("\n")
+
 if failed_games:
     results.write(
-        "The following titles failed to be added to your library.\nIt is likely they were not found:\n"
+        "The following titles failed to be added to your library for an unknown reason:\n"
     )
     for game in failed_games:
         results.write(game + "\n")
