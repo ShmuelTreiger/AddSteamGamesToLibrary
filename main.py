@@ -1,3 +1,4 @@
+import logging
 from configparser import ConfigParser
 
 from bs4 import BeautifulSoup
@@ -44,6 +45,15 @@ e.send_keys(Keys.ENTER)
 
 # TODO: Check for successful login
 
+config = ConfigParser()
+config.read("config.ini")
+
+# Initiate logging to standard out if setting in config.ini is true
+log_to_std_out = config.get(section="General", option="log_to_std_out")
+if log_to_std_out:
+    logging.getLogger().addHandler(logging.StreamHandler())
+    logging.getLogger().setLevel(logging.INFO)
+
 # Load games list
 games_list = open("games.txt", "r", encoding="utf8")
 games = games_list.readlines()
@@ -62,7 +72,7 @@ while i < len(games):
 
     # Search for title
     game = games[i].strip()  # Remove trailing white space
-    print(f'Attempting to add "{game}" to your Steam library.')
+    logging.info(f"Attempting to add '{game}' to your Steam library.")
     e = driver.find_element(by=By.XPATH, value='//*[@id="store_nav_search_term"]')
     e.send_keys(game)
     driver.implicitly_wait(implicit_wait_time)
@@ -71,6 +81,7 @@ while i < len(games):
     try:
         e = driver.find_element(by=By.PARTIAL_LINK_TEXT, value=game)
     except NoSuchElementException:
+        logging.info(f"'{game}' not found.")
         games_not_found.append(game)
         i += 1
         continue
@@ -83,23 +94,23 @@ while i < len(games):
     # Check if game already in library
     message = f"{game} is already in your Steam library"
     if all_text.find(message) >= 0:
+        logging.info(f"'{game}' already in your Steam Library.")
         games_already_in_library.append(game)
         i += 1
         continue
 
     # Check if game costs money
     if all_text.lower().find("buy"):
+        logging.info(f"'{game}' costs money.")
         games_cost_money.append(game)
         i += 1
         continue
-
-    config = ConfigParser()
-    config.read("config.ini")
 
     # Skip early access games if option is true
     skip_early_access_games = config.get(section="General", option="skip_early_access_games")
     if skip_early_access_games:
         if all_text.find("Early Access Game") >= 0:
+            logging.info(f"'{game}' is an early access game.")
             early_access_games.append(game)
             i += 1
             continue
@@ -108,6 +119,7 @@ while i < len(games):
     skip_game_demos = config.get(section="General", option="skip_game_demos")
     if skip_game_demos:
         if all_text.find(f"Download {game} Demo") >= 0:
+            logging.info(f"'{game}' is a demo.")
             game_demos.append(game)
             i += 1
             continue
@@ -116,6 +128,7 @@ while i < len(games):
     try:
         e = driver.find_element(by=By.XPATH, value='//*[@id="game_area_purchase"]/div/div[2]/div/div[3]/span')
     except NoSuchElementException:
+        logging.info(f"'{game}' failed to be added to your account.")
         failed_games.append(game)
         i += 1
         continue
@@ -126,12 +139,14 @@ while i < len(games):
     try:
         e = driver.find_element(by=By.CLASS_NAME, value="newmodal_content")
     except NoSuchElementException:
+        logging.info(f"Success message not found after attempting to add '{game}' to your account. Exiting program.")
         games_not_reached.append(game)
         i += 1
         break
     expected_message = f"{game} has been added to your account.  It is now available in your Steam Library.".lower()
     message = e.get_attribute("innerHTML")
     if message.lower().find(expected_message) < 0:
+        logging.info(f"Success message not found after attempting to add '{game}' to your account. Exiting program.")
         games_not_reached.append(game)
         i += 1
         break
@@ -140,6 +155,7 @@ while i < len(games):
     try:
         e = driver.find_element(by=By.CLASS_NAME, value="btn_grey_steamui")
     except NoSuchElementException:
+        logging.info(f"'{game}' failed to be added to your account for an unknown reason.")
         failed_games.append(game)
         i += 1
         break
@@ -147,6 +163,7 @@ while i < len(games):
     driver.implicitly_wait(implicit_wait_time)
 
     successful_games.append(game)
+    logging.info(f"{game} was successfully added to your account.")
     i += 1
 
 # Create list of games that weren't reached
