@@ -74,6 +74,7 @@ while i < len(games):
     game = games[i].strip()  # Remove trailing white space
     logging.info(f"Attempting to add '{game}' to your Steam library.")
     e = driver.find_element(by=By.XPATH, value='//*[@id="store_nav_search_term"]')
+    e.clear()
     e.send_keys(game)
     driver.implicitly_wait(implicit_wait_time)
 
@@ -84,6 +85,7 @@ while i < len(games):
         logging.info(f"'{game}' not found.")
         games_not_found.append(game)
         i += 1
+        e.clear()
         continue
     e.click()
     driver.implicitly_wait(implicit_wait_time)
