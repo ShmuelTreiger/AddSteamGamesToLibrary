@@ -146,8 +146,8 @@ while i < len(games):
         i += 1
         break
     expected_message = f"{game} has been added to your account.  It is now available in your Steam Library.".lower()
-    message = e.get_attribute("innerHTML")
-    if message.lower().find(expected_message) < 0:
+    message = e.get_attribute("innerHTML").lower()
+    if message.find(expected_message) < 0:
         logging.info(f"Success message not found after attempting to add '{game}' to your account. Exiting program.")
         games_not_reached.append(game)
         i += 1
@@ -200,19 +200,23 @@ if games_not_found:
     results.write("\n")
 
 if failed_games:
-    results.write("The following titles failed to be added to your library for an unknown reason:\n")
+    results.write("The following titles failed to be added to your library for unknown reasons:\n")
     for game in failed_games:
         results.write(game + "\n")
     results.write("\n")
 
 if early_access_games:
-    results.write("The following early access games were skipped.\nTo download, change the setting in config.ini:\n")
+    results.write(
+        "The following early access games were skipped.\nTo add them to your account, change the setting in config.ini:\n"
+    )
     for game in early_access_games:
         results.write(game + "\n")
     results.write("\n")
 
 if game_demos:
-    results.write("The following game demos were skipped.\nTo download, change the setting in config.ini:\n")
+    results.write(
+        "The following game demos were skipped.\nTo add them to your account, change the setting in config.ini:\n"
+    )
     for game in game_demos:
         results.write(game + "\n")
     results.write("\n")
