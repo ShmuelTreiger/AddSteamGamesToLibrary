@@ -11,6 +11,16 @@ import credentials
 steam_url = "https://www.steampowered.com"
 implicit_wait_time = 2
 
+username = credentials.username
+password = credentials.password
+
+if not username:
+    raise Exception("You must write your username into credentials.py.")
+
+if not password:
+    raise Exception("You must write your password into credentials.py.")
+
+
 # Open browser
 driver = webdriver.Chrome()
 
@@ -24,12 +34,12 @@ driver.implicitly_wait(implicit_wait_time)
 
 # Login
 e = driver.find_element(by=By.CLASS_NAME, value="_2eKVn6g5Yysx9JmutQe7WV")
-e.send_keys(credentials.username)
+e.send_keys(username)
 e = driver.find_element(
     by=By.XPATH,
     value='//*[@id="responsive_page_template_content"]/div[3]/div[1]/div/div/div/div[2]/div/form/div[2]/input',
 )
-e.send_keys(credentials.password)
+e.send_keys(password)
 e.send_keys(Keys.ENTER)
 
 # Load games list
