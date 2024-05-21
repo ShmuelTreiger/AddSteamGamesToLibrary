@@ -87,14 +87,16 @@ while i < len(games):
 
     config = ConfigParser()
     config.read("config.ini")
+    
+    # Skip early access games if option is true
     skip_early_access_games = config.get(section="General", option="skip_early_access_games")
-
     if skip_early_access_games:
         if all_text.find("Early Access Game") >= 0:
             early_access_games.append(game)
             i += 1
             continue
 
+    # Skip game demos if option is true
     skip_game_demos = config.get(section="General", option="skip_game_demos")
     if skip_game_demos:
         if all_text.find(f"Download {game} Demo") >= 0:
@@ -113,13 +115,13 @@ while i < len(games):
     driver.implicitly_wait(implicit_wait_time)
 
     # Check for confirmed success message
-    expected_message = f"{game} has been added to your account.  It is now available in your Steam Library.".lower()
     try:
         e = driver.find_element(by=By.CLASS_NAME, value="newmodal_content")
     except NoSuchElementException:
         games_not_reached.append(game)
         i += 1
         break
+    expected_message = f"{game} has been added to your account.  It is now available in your Steam Library.".lower()
     message = e.get_attribute("innerHTML")
     if message.lower().find(expected_message) < 0:
         games_not_reached.append(game)
