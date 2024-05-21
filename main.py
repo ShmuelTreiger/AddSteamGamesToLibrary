@@ -49,6 +49,7 @@ games_list = open("games.txt", "r", encoding="utf8")
 games = games_list.readlines()
 
 successful_games = []
+games_already_in_library = []
 failed_games = []
 early_access_games = []
 game_demos = []
@@ -74,13 +75,21 @@ while i < len(games):
     e.click()
     driver.implicitly_wait(implicit_wait_time)
 
+    soup = BeautifulSoup(driver.page_source, "html.parser")
+    all_text = soup.get_text()
+
+    # Check if game already in library
+    message = f"{game} is already in your Steam library"
+    if all_text.find(message) >= 0:
+        games_already_in_library.append(game)
+        i += 1
+        continue
+
     config = ConfigParser()
     config.read("config.ini")
     skip_early_access_games = config.get(section="General", option="skip_early_access_games")
 
     if skip_early_access_games:
-        soup = BeautifulSoup(driver.page_source, "html.parser")
-        all_text = soup.get_text()
         if all_text.find("Early Access Game") >= 0:
             early_access_games.append(game)
             i += 1
@@ -88,8 +97,6 @@ while i < len(games):
 
     skip_game_demos = config.get(section="General", option="skip_game_demos")
     if skip_game_demos:
-        soup = BeautifulSoup(driver.page_source, "html.parser")
-        all_text = soup.get_text()
         if all_text.find(f"Download {game} Demo") >= 0:
             game_demos.append(game)
             i += 1
@@ -145,9 +152,17 @@ if successful_games:
         results.write(game + "\n")
     results.write("\n")
 
+if games_already_in_library:
+    results.write(
+        "The following titles are already in your library:\n"
+    )
+    for game in games_already_in_library:
+        results.write(game + "\n")
+    results.write("\n")
+
 if failed_games:
     results.write(
-        "The following titles failed to be added to your library.\nIt is likely they were either not free, not found, or already in your library:\n"
+        "The following titles failed to be added to your library.\nIt is likely they were either not free or not found:\n"
     )
     for game in failed_games:
         results.write(game + "\n")
