@@ -42,6 +42,8 @@ e = driver.find_element(
 e.send_keys(password)
 e.send_keys(Keys.ENTER)
 
+# TODO: Check for successful login
+
 # Load games list
 games_list = open("games.txt", "r", encoding="utf8")
 games = games_list.readlines()
