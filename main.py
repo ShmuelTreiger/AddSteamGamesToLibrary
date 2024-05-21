@@ -59,6 +59,7 @@ while i < len(games):
 
     # Search for title
     game = games[i].strip()  # Remove trailing white space
+    print(f"Attempting to add \"{game}\" to your Steam library.")
     e = driver.find_element(by=By.XPATH, value='//*[@id="store_nav_search_term"]')
     e.send_keys(game)
     driver.implicitly_wait(implicit_wait_time)
