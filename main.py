@@ -62,7 +62,7 @@ while i < len(games):
 
     # Search for title
     game = games[i].strip()  # Remove trailing white space
-    print(f"Attempting to add \"{game}\" to your Steam library.")
+    print(f'Attempting to add "{game}" to your Steam library.')
     e = driver.find_element(by=By.XPATH, value='//*[@id="store_nav_search_term"]')
     e.send_keys(game)
     driver.implicitly_wait(implicit_wait_time)
@@ -163,33 +163,25 @@ if successful_games:
     results.write("\n")
 
 if games_already_in_library:
-    results.write(
-        "The following titles are already in your library:\n"
-    )
+    results.write("The following titles are already in your library:\n")
     for game in games_already_in_library:
         results.write(game + "\n")
     results.write("\n")
 
 if games_cost_money:
-    results.write(
-        "The following titles are not free:\n"
-    )
+    results.write("The following titles are not free:\n")
     for game in games_cost_money:
         results.write(game + "\n")
     results.write("\n")
 
 if games_not_found:
-    results.write(
-        "The following titles were not found on steam:\n"
-    )
+    results.write("The following titles were not found on steam:\n")
     for game in games_not_found:
         results.write(game + "\n")
     results.write("\n")
 
 if failed_games:
-    results.write(
-        "The following titles failed to be added to your library for an unknown reason:\n"
-    )
+    results.write("The following titles failed to be added to your library for an unknown reason:\n")
     for game in failed_games:
         results.write(game + "\n")
     results.write("\n")
