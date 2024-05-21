@@ -50,6 +50,7 @@ games = games_list.readlines()
 
 successful_games = []
 games_already_in_library = []
+games_cost_money = []
 failed_games = []
 early_access_games = []
 game_demos = []
@@ -85,9 +86,15 @@ while i < len(games):
         i += 1
         continue
 
+    # Check if game costs money
+    if all_text.lower().find("buy"):
+        games_cost_money.append(game)
+        i += 1
+        continue
+
     config = ConfigParser()
     config.read("config.ini")
-    
+
     # Skip early access games if option is true
     skip_early_access_games = config.get(section="General", option="skip_early_access_games")
     if skip_early_access_games:
@@ -162,9 +169,17 @@ if games_already_in_library:
         results.write(game + "\n")
     results.write("\n")
 
+if games_cost_money:
+    results.write(
+        "The following titles are not free:\n"
+    )
+    for game in games_cost_money:
+        results.write(game + "\n")
+    results.write("\n")
+
 if failed_games:
     results.write(
-        "The following titles failed to be added to your library.\nIt is likely they were either not free or not found:\n"
+        "The following titles failed to be added to your library.\nIt is likely they were not found:\n"
     )
     for game in failed_games:
         results.write(game + "\n")
