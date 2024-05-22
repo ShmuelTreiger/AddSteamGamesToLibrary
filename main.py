@@ -49,7 +49,7 @@ config = ConfigParser()
 config.read("config.ini")
 
 # Initiate logging to standard out if setting in config.ini is true
-log_to_std_out = config.get(section="General", option="log_to_std_out")
+log_to_std_out = config.getboolean(section="General", option="log_to_std_out")
 if log_to_std_out:
     logging.getLogger().addHandler(logging.StreamHandler())
     logging.getLogger().setLevel(logging.INFO)
@@ -109,7 +109,7 @@ while i < len(games):
         continue
 
     # Skip early access games if option is true
-    skip_early_access_games = config.get(section="General", option="skip_early_access_games")
+    skip_early_access_games = config.getboolean(section="General", option="skip_early_access_games")
     if skip_early_access_games:
         if all_text.find("Early Access Game") >= 0:
             logging.info(f"'{game}' is an early access game.")
@@ -118,7 +118,7 @@ while i < len(games):
             continue
 
     # Skip game demos if option is true
-    skip_game_demos = config.get(section="General", option="skip_game_demos")
+    skip_game_demos = config.getboolean(section="General", option="skip_game_demos")
     if skip_game_demos:
         if all_text.find(f"Download {game} Demo") >= 0:
             logging.info(f"'{game}' is a demo.")
