@@ -180,6 +180,8 @@ while i < len(games):
     logging.info(f"{game} was successfully added to your account.")
     i += 1
 
+driver.close()
+
 # Create list of games that weren't reached
 while i < len(games):
     game = games[i].strip()  # Remove trailing white space
@@ -242,5 +244,3 @@ if games_not_reached:
     )
     for game in games_not_reached:
         results.write(game + "\n")
-
-driver.close()
