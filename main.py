@@ -102,7 +102,7 @@ while i < len(games):
         continue
 
     # Check if game costs money
-    if all_text.lower().find("buy"):
+    if all_text.lower().find(f"buy {game.lower()}") >= 0:
         logging.info(f"'{game}' costs money.")
         games_cost_money.append(game)
         i += 1
