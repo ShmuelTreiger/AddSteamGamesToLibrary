@@ -13,14 +13,25 @@ steam_url = "https://www.steampowered.com"
 implicit_wait_time = 2
 
 username = credentials.username
-password = credentials.password
-
 if not username:
     raise Exception("You must write your username into credentials.py.")
 
+password = credentials.password
 if not password:
     raise Exception("You must write your password into credentials.py.")
 
+config = ConfigParser()
+config.read("config.ini")
+
+# Initiate logging to standard out if setting in config.ini is true
+log_to_std_out = config.getboolean(section="General", option="log_to_std_out")
+if log_to_std_out:
+    logging.getLogger().addHandler(logging.StreamHandler())
+    logging.getLogger().setLevel(logging.INFO)
+
+# Load games list
+games_list = open("games.txt", "r", encoding="utf8")
+games = games_list.readlines()
 
 # Open browser
 driver = webdriver.Chrome()
@@ -44,19 +55,6 @@ e.send_keys(password)
 e.send_keys(Keys.ENTER)
 
 # TODO: Check for successful login
-
-config = ConfigParser()
-config.read("config.ini")
-
-# Initiate logging to standard out if setting in config.ini is true
-log_to_std_out = config.getboolean(section="General", option="log_to_std_out")
-if log_to_std_out:
-    logging.getLogger().addHandler(logging.StreamHandler())
-    logging.getLogger().setLevel(logging.INFO)
-
-# Load games list
-games_list = open("games.txt", "r", encoding="utf8")
-games = games_list.readlines()
 
 successful_games = []
 games_already_in_library = []
