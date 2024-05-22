@@ -141,7 +141,9 @@ while i < len(games):
     try:
         e = driver.find_element(by=By.CLASS_NAME, value="newmodal_content")
     except NoSuchElementException:
-        logging.info(f"For an unknown reason, confirmation popup not found after attempting to add '{game}' to your library.")
+        logging.info(
+            f"For an unknown reason, confirmation popup not found after attempting to add '{game}' to your library."
+        )
         failed_games.append(game)
         i += 1
         continue
@@ -150,7 +152,9 @@ while i < len(games):
     expected_message = f"{game} has been added to your account.  It is now available in your Steam Library.".lower()
     failure_message = "There was a problem adding this product to your account.  Please try again later.".lower()
     if message_lower.find(failure_message) >= 0:
-        logging.info(f"Failure message found after attempting to add '{game}'. You have likely surpassed Steam's rate limiting. Exiting program. Please wait and try again.")
+        logging.info(
+            f"Failure message found after attempting to add '{game}'. You have likely surpassed Steam's rate limiting. Exiting program. Please wait and try again."
+        )
         games_not_reached.append(game)
         i += 1
         break
@@ -196,19 +200,22 @@ if games_already_in_library:
     results.write("\n")
 
 if games_cost_money:
-    results.write("The following titles are not free:\n")
+    results.write("The following titles are not free.\n")
+    results.write("It is possible that there are two games with the same title, so it may be worth double checking:\n")
     for game in games_cost_money:
         results.write(game + "\n")
     results.write("\n")
 
 if games_not_found:
-    results.write("The following titles were not found on steam:\n")
+    results.write("The following titles were not found on steam.\n")
+    results.write("This may be an error, so it may be worth double checking:\n")
     for game in games_not_found:
         results.write(game + "\n")
     results.write("\n")
 
 if failed_games:
-    results.write("The following titles failed to be added to your library for unknown reasons:\n")
+    results.write("The following titles failed to be added to your library for unknown reasons.\n")
+    results.write("It is probably worth double checking these titles:\n")
     for game in failed_games:
         results.write(game + "\n")
     results.write("\n")
@@ -231,7 +238,7 @@ if game_demos:
 
 if games_not_reached:
     results.write(
-        "The following titles were not attempted.\nYou have likely reached the maximum number of titles Steam will allow you to add for now.\nTry again later:\n"
+        "The following titles were not attempted to add to your account.\nYou have likely reached the maximum number of titles Steam will allow you to add for now.\nTry again later:\n"
     )
     for game in games_not_reached:
         results.write(game + "\n")
