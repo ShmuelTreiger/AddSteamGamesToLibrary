@@ -137,19 +137,27 @@ while i < len(games):
     e.click()
     driver.implicitly_wait(implicit_wait_time)
 
-    # Check for confirmed success message
+    # Check for success message
     try:
         e = driver.find_element(by=By.CLASS_NAME, value="newmodal_content")
     except NoSuchElementException:
-        logging.info(f"Success message not found after attempting to add '{game}' to your account. Exiting program.")
+        logging.info(f"For an unknown reason, confirmation popup not found after attempting to add '{game}' to your library.")
+        failed_games.append(game)
+        i += 1
+        continue
+    message = e.get_attribute("innerHTML")
+    message_lower = message.lower()
+    expected_message = f"{game} has been added to your account.  It is now available in your Steam Library.".lower()
+    failure_message = "There was a problem adding this product to your account.  Please try again later.".lower()
+    if message_lower.find(failure_message) >= 0:
+        logging.info(f"Failure message found after attempting to add '{game}'. You have likely surpassed Steam's rate limiting. Exiting program. Please wait and try again.")
         games_not_reached.append(game)
         i += 1
         break
-    expected_message = f"{game} has been added to your account.  It is now available in your Steam Library.".lower()
-    message = e.get_attribute("innerHTML").lower()
-    if message.find(expected_message) < 0:
-        logging.info(f"Success message not found after attempting to add '{game}' to your account. Exiting program.")
-        games_not_reached.append(game)
+    if message_lower.find(expected_message) < 0:
+        logging.info(f"Unknown message found after attempting to add '{game}' to your account.")
+        logging.info(f"Message found instead: {message}")
+        failed_games.append(game)
         i += 1
         break
 
