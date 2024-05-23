@@ -186,6 +186,7 @@ while i < len(games):
     games_not_reached.append(game)
     i += 1
 
+# Print results to 'results.txt' file
 results = open("results.txt", "w", encoding="utf8")
 if successful_games:
     results.write("The following titles were successfully added to your library:\n")
@@ -221,24 +222,22 @@ if failed_games:
     results.write("\n")
 
 if early_access_games:
-    results.write(
-        "The following early access games were skipped.\nTo add them to your account, change the setting in config.ini:\n"
-    )
+    results.write("The following early access games were skipped.\n")
+    results.write("To add them to your account, change the setting in config.ini:\n")
     for game in early_access_games:
         results.write(game + "\n")
     results.write("\n")
 
 if game_demos:
-    results.write(
-        "The following game demos were skipped.\nTo add them to your account, change the setting in config.ini:\n"
-    )
+    results.write("The following game demos were skipped.\n")
+    results.write("To add them to your account, change the setting in config.ini:\n")
     for game in game_demos:
         results.write(game + "\n")
     results.write("\n")
 
 if games_not_reached:
-    results.write(
-        "The following titles were not attempted to add to your account.\nYou have likely reached the maximum number of titles Steam will allow you to add for now.\nTry again later:\n"
-    )
+    results.write("The following titles were not attempted to add to your account.\n")
+    results.write("You have likely reached the maximum number of titles Steam will allow you to add for now.\n")
+    results.write("Try again later:\n")
     for game in games_not_reached:
         results.write(game + "\n")
