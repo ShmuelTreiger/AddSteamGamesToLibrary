@@ -147,7 +147,6 @@ while i < len(games):
         continue
     message = e.get_attribute("innerHTML")
     message_lower = message.lower()
-    expected_message = f"{game} has been added to your account.  It is now available in your Steam Library.".lower()
     failure_message = "There was a problem adding this product to your account.  Please try again later.".lower()
     if message_lower.find(failure_message) >= 0:
         logging.info(
@@ -156,6 +155,9 @@ while i < len(games):
         games_not_reached.append(game)
         i += 1
         break
+
+    expected_message = f"{game} has been added to your account.  It is now available in your Steam Library.".lower()
+    expected_message.replace("&",  "& amp;")
     if message_lower.find(expected_message) < 0:
         logging.info(f"Unknown message found after attempting to add '{game}' to your account.")
         logging.info(f"Message found instead: {message}")
