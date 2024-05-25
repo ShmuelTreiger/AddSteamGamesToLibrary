@@ -156,8 +156,7 @@ while i < len(games):
         i += 1
         break
 
-    expected_message = f"{game} has been added to your account.  It is now available in your Steam Library.".lower()
-    expected_message.replace("&",  "& amp;")
+    expected_message = "has been added to your account.  It is now available in your Steam Library.".lower()
     if message_lower.find(expected_message) < 0:
         logging.info(f"Unknown message found after attempting to add '{game}' to your account.")
         logging.info(f"Message found instead: {message}")
