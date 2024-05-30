@@ -10,7 +10,6 @@ from selenium.webdriver.common.keys import Keys
 import credentials
 
 steam_url = "https://www.steampowered.com"
-implicit_wait_time = 2
 
 username = credentials.username
 if not username:
@@ -22,6 +21,8 @@ if not password:
 
 config = ConfigParser()
 config.read("config.ini")
+
+implicit_wait_time = config.getint(section="General", option="implicit_wait_time")
 
 # Initiate logging to standard out if setting in config.ini is true
 log_to_std_out = config.getboolean(section="General", option="log_to_std_out")
