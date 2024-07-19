@@ -46,7 +46,7 @@ e.click()
 driver.implicitly_wait(implicit_wait_time)
 
 # Login
-e = driver.find_element(by=By.CLASS_NAME, value="_2eKVn6g5Yysx9JmutQe7WV")
+e = driver.find_element(by=By.CLASS_NAME, value="_2GBWeup5cttgbTw8FM3tfx")
 e.send_keys(username)
 e = driver.find_element(
     by=By.XPATH,
